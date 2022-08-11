@@ -1411,6 +1411,8 @@ func convertRespToPKCS8(resp *logical.Response) error {
 }
 
 func handleOtherCSRSANs(in *x509.CertificateRequest, sans map[string][]string) error {
+	fmt.Println("handleOtherCSRSANs: " + fmt.Sprint(sans))
+
 	certTemplate := &x509.Certificate{
 		DNSNames:       in.DNSNames,
 		IPAddresses:    in.IPAddresses,
@@ -1421,6 +1423,7 @@ func handleOtherCSRSANs(in *x509.CertificateRequest, sans map[string][]string) e
 		return err
 	}
 	if len(certTemplate.ExtraExtensions) > 0 {
+		fmt.Println("Adding extra extensions: " + fmt.Sprint(certTemplate.ExtraExtensions))
 		for _, v := range certTemplate.ExtraExtensions {
 			in.ExtraExtensions = append(in.ExtraExtensions, v)
 		}
@@ -1429,6 +1432,8 @@ func handleOtherCSRSANs(in *x509.CertificateRequest, sans map[string][]string) e
 }
 
 func handleOtherSANs(in *x509.Certificate, sans map[string][]string) error {
+	fmt.Println("handleOtherSANs: " + fmt.Sprint(sans))
+
 	// If other SANs is empty we return which causes normal Go stdlib parsing
 	// of the other SAN types
 	if len(sans) == 0 {
